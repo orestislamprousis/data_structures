@@ -7,4 +7,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(orla_data_structures)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vector)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/doubly_linked_list)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)

@@ -1,2 +1,3 @@
 add_executable (test_orla_data_structures test.cpp)
 target_link_libraries (test_orla_data_structures orla_vector)
+target_link_libraries (test_orla_data_structures orla_doubly_linked_list)
