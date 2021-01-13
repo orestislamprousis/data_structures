@@ -1,0 +1,2 @@
+add_library(orla_singly_linked_list INTERFACE)
+target_include_directories(orla_singly_linked_list INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
