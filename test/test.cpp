@@ -22,6 +22,7 @@ void test_vector()
     assert(vec.at(1) == 2);
 
     vec.insert(1, 3);
+    assert(vec.at(0) == 1);
     assert(vec.at(1) == 3);
     assert(vec.at(2) == 2);
 
@@ -61,9 +62,12 @@ void test_vector()
     assert(vec.at(0) == 4);
     assert(vec.at(1) == 5);
 
-    /* test capacity doubled */
-    vec.push(4);
+    /* test capacity doubled and resize with a gap works */
+    vec.insert(1, 4);
     assert(vec.capacity() == 4);
+    assert(vec.at(0) == 4);
+    assert(vec.at(1) == 4);
+    assert(vec.at(2) == 5);
 
     /* test mutltiple removed */
     vec.remove(4);
@@ -312,5 +316,6 @@ int main()
     test_vector();
     test_doubly_linked_list();
     test_singly_linked_list();
+    printf("Success!\n");
     return 0;
 }

@@ -41,6 +41,8 @@ private:
     /* functions */
     void        resize(const size_t new_capacity);
     void        check_resize(bool will_add = true);
+    void        resize_with_gap(const size_t new_capacity, const size_t gap_index);
+    bool        resized_to_insert_at(const size_t index);
     int         find_from_index(const size_t index, const T& item);
     inline void post_delete_actions();
 };
@@ -106,13 +108,12 @@ template <class T>
 void vector<T>::insert(const size_t index, const T& item)
 {
     if (index > m_size)
-        throw std::out_of_range("Out of range index to insert item. Index should be <= size()");
+        throw std::out_of_range("Out of range index to insert item.\
+                                Index should be <= size()");
 
-    check_resize();
-
-    /* Shift trailing items if they exist */
-    if (m_size)
+    if (m_size && !resized_to_insert_at(index))
     {
+        /* Shift trailing items if they exist */
         size_t max_index = m_size - 1;
         for (size_t i = max_index; i >= index && i <= max_index; --i)
         {
@@ -233,6 +234,42 @@ void vector<T>::check_resize(bool will_add)
     {
         resize(m_capacity / 2);
     }
+}
+
+template <class T>
+void vector<T>::resize_with_gap(const size_t new_capacity, const size_t gap_index)
+{
+    if (new_capacity <= m_size)
+        throw std::logic_error("Loss of data due to resizing with gap. \
+                                New capacity needs to be > current size");
+
+    if (gap_index > m_size)
+        throw std::logic_error("Out of range index to add a gap");
+
+    T* temp_array = new T[new_capacity];
+
+    for (size_t i = 0; i < gap_index; ++i)
+        *(temp_array + i) = *(m_array + i);
+
+    for (size_t i = gap_index + 1; i <= m_size; ++i)
+        *(temp_array + i) = *(m_array + i - 1);
+
+    delete[] m_array;
+    m_array = temp_array;
+
+    m_capacity = new_capacity;
+}
+
+template <class T>
+bool vector<T>::resized_to_insert_at(const size_t index)
+{
+    if (m_size >= m_capacity)
+    {
+        resize_with_gap(m_capacity * 2, index);
+        return true;
+    }
+
+    return false;
 }
 
 template <class T>
